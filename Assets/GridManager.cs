@@ -45,6 +45,7 @@ public class GridManager : MonoBehaviour {
 				temp.Add(visibleGrid[i]);
 			}
 		}
+
 		visibleGrid[2] = standingCube;
 	}
 }
