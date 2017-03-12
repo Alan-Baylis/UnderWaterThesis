@@ -12,13 +12,12 @@ public class GridManager : MonoBehaviour {
 	LinkedList<GameObject> gridLine;
 	private GameObject[] visibleGrid;
 	private GameObject[] trueGrid;
-	private float cubeWidth;
+	private float cubeWidth = 2;
 	// Use this for initialization
 	void Start () {
 		gridLine = new LinkedList<GameObject>();
 		visibleGrid = new GameObject[visibleGridSize];
 		playerPos = startingPosition;
-		cubeWidth = cube.GetComponent<BoxCollider>().bounds.size.x;
 		GameObject temp = Instantiate(cube, new Vector3(startingPosition, 0, 0), Quaternion.identity);
 		temp.GetComponent<BasicGroundBehavior>().effectivePosition = 0;
 		gridLine.AddFirst(temp);
@@ -41,7 +40,7 @@ public class GridManager : MonoBehaviour {
 			gridLine.RemoveLast();
 			GameObject first = gridLine.First.Value;
 			temp.transform.position = new Vector3(first.transform.position.x - cubeWidth, temp.transform.position.y, 0);
-			temp.GetComponent<BasicGroundBehavior>().ModifyPosition((int)first.transform.position.x - (int)cubeWidth);
+			temp.GetComponent<BasicGroundBehavior>().ModifyPosition((int)first.transform.position.x - (int)cubeWidth, x - visibleGridSize / 2);
 			gridLine.AddFirst(temp);
 		}
 		else if(x > playerPos) {
@@ -49,8 +48,7 @@ public class GridManager : MonoBehaviour {
 			gridLine.RemoveFirst();
 			GameObject last = gridLine.Last.Value;
 			temp.transform.position = new Vector3(last.transform.position.x + cubeWidth, temp.transform.position.y, 0);
-			//GameObject temp = Instantiate(cube, new Vector3(last.transform.position.x + cubeWidth, 0, 0), Quaternion.identity);
-			temp.GetComponent<BasicGroundBehavior>().ModifyPosition((int)last.transform.position.x + (int)cubeWidth);
+			temp.GetComponent<BasicGroundBehavior>().ModifyPosition((int)last.transform.position.x + (int)cubeWidth, x + Mathf.CeilToInt(visibleGridSize / 2) + 2);
 			gridLine.AddLast(temp);
 		}
 		playerPos = x;

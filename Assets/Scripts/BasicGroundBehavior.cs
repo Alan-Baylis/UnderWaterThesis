@@ -33,7 +33,9 @@ public class BasicGroundBehavior : MonoBehaviour {
 		gridManager.UpdatePlayerPosition(effectivePosition, gameObject);
 	}
 
-	public void ModifyPosition(int newX) {
+	public void ModifyPosition(int newX, int newEffectivePosition) {
 		startPos.x = newX;
+		effectivePosition = newEffectivePosition;
+		Debug.Log(effectivePosition);
 	}
 }

@@ -6,8 +6,9 @@ using System;
 public class WhiteNoiseGenerator : MonoBehaviour {
 
 	public double frequency = 440;
-	public double gain = 0.05f;
+	public double gain = 0.01f;
 
+	float gainScale = 0.1f;
 	private double increment;
 	private System.Random RandomNumber = new System.Random();
 	AudioLowPassFilter lowPassFilter;
@@ -20,17 +21,18 @@ public class WhiteNoiseGenerator : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
 		lowPassFilter = GetComponent<AudioLowPassFilter>();
-		lowPassFilter.cutoffFrequency = 800;
+		//lowPassFilter.cutoffFrequency = 800;
 	}
 
 	// Update is called once per frame
 	void Update () {
-		lowPassFilter.cutoffFrequency = lowPassFrequency + (lowPassFilterWaveSize * Mathf.Sin(Time.time));
+		gain = (Mathf.Sin(Time.time) * gainScale);
+		//lowPassFilter.cutoffFrequency = lowPassFrequency + (lowPassFilterWaveSize * Mathf.Sin(Time.time));
 	}
 
 	void OnAudioFilterRead(float[] data, int channels) {
 	for(int i = 0; i < data.Length; i++) {
-		data[i] = offset - 1.0f + (float)RandomNumber.NextDouble() * 2.0f;
+		data[i] = (offset - 1.0f + (float)RandomNumber.NextDouble() * 2.0f) * (float)gain;
 	}
 	/*increment = frequency * 2 * Math.PI / sampling_frequency;
 	for(var i = 0; i < data.Length; i = i + channels) {
