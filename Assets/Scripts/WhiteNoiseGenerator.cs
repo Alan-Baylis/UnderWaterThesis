@@ -6,7 +6,7 @@ using System;
 public class WhiteNoiseGenerator : MonoBehaviour {
 
 	public double frequency = 440;
-	public double gain = 0.01f;
+	public double gain = 0.05f;
 
 	float gainScale = 0.1f;
 	private double increment;
@@ -20,26 +20,34 @@ public class WhiteNoiseGenerator : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-		lowPassFilter = GetComponent<AudioLowPassFilter>();
+		//lowPassFilter = GetComponent<AudioLowPassFilter>();
 		//lowPassFilter.cutoffFrequency = 800;
 	}
 
 	// Update is called once per frame
 	void Update () {
-		gain = (Mathf.Sin(Time.time) * gainScale);
+		//gain = (Mathf.Sin(Time.time) * gainScale);
 		//lowPassFilter.cutoffFrequency = lowPassFrequency + (lowPassFilterWaveSize * Mathf.Sin(Time.time));
 	}
 
 	void OnAudioFilterRead(float[] data, int channels) {
-	for(int i = 0; i < data.Length; i++) {
+	/*for(int i = 0; i < data.Length; i++) {
 		data[i] = (offset - 1.0f + (float)RandomNumber.NextDouble() * 2.0f) * (float)gain;
-	}
-	/*increment = frequency * 2 * Math.PI / sampling_frequency;
+	}*/
+	increment = frequency * 2 * Math.PI / sampling_frequency;
 	for(var i = 0; i < data.Length; i = i + channels) {
 		phase = phase + increment;
-		data[i] = (float)(gain * Math.Sin(phase));
+		// Sawtooth
+		//double value = Math.Floor(phase);
+		// Triangle
+		//double value = ((phase % 4 - 2) - 1);
+		// Square
+		//double value = (Math.Sin(phase) > 0 ? 1 : -1);
+		// Normal
+		double value = Math.Sin(phase);
+		data[i] = (float)(gain * value);
 		if(channels == 2) data[i + 1] = data[i];
 		if(phase > 2 * Math.PI) phase = 0;
-	}*/
+	}
 	}
 }
