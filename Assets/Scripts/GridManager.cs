@@ -10,6 +10,7 @@ public class GridManager : MonoBehaviour {
 	public GameObject cube;
 	private int playerPos;
 	LinkedList<GameObject> gridLine;
+	LinkedListNode<GameObject> currentCube;
 	private GameObject[] visibleGrid;
 	private GameObject[] trueGrid;
 	private float cubeWidth = 2;
@@ -27,6 +28,8 @@ public class GridManager : MonoBehaviour {
 			gridLine.AddLast(temp);
 		}
 		BasicGroundBehavior.gridManager = this;
+		currentCube = gridLine.First;
+		Debug.Log(currentCube.Next.Value);
 	}
 	
 	// Update is called once per frame
@@ -42,8 +45,10 @@ public class GridManager : MonoBehaviour {
 			temp.transform.position = new Vector3(first.transform.position.x - cubeWidth, temp.transform.position.y, 0);
 			temp.GetComponent<BasicGroundBehavior>().ModifyPosition((int)first.transform.position.x - (int)cubeWidth, x - visibleGridSize / 2);
 			gridLine.AddFirst(temp);
+			currentCube = currentCube.Previous; 
 		}
 		else if(x > playerPos) {
+			currentCube = currentCube.Next;
 			GameObject temp = gridLine.First.Value;
 			gridLine.RemoveFirst();
 			GameObject last = gridLine.Last.Value;
@@ -51,6 +56,13 @@ public class GridManager : MonoBehaviour {
 			temp.GetComponent<BasicGroundBehavior>().ModifyPosition((int)last.transform.position.x + (int)cubeWidth, x + Mathf.CeilToInt(visibleGridSize / 2) + 2);
 			gridLine.AddLast(temp);
 		}
+		RotateCubesTowardsPlayer();
 		playerPos = x;
+	}
+
+	void RotateCubesTowardsPlayer() {
+		currentCube.Next.Value.transform.rotation = Quaternion.AngleAxis(5, Vector3.forward);
+		currentCube.Previous.Value.transform.rotation = Quaternion.AngleAxis(-5, Vector3.forward);
+		currentCube.Value.transform.rotation = Quaternion.identity;
 	}
 }
