@@ -19,17 +19,15 @@ public class GridManager : MonoBehaviour {
 		gridLine = new LinkedList<GameObject>();
 		visibleGrid = new GameObject[visibleGridSize];
 		playerPos = startingPosition;
-		GameObject temp = Instantiate(cube, new Vector3(startingPosition, 0, 0), Quaternion.identity);
-		temp.GetComponent<BasicGroundBehavior>().effectivePosition = 0;
-		gridLine.AddFirst(temp);
-		for(int i = 1; i< visibleGridSize; i++) {
-			temp = Instantiate(cube, new Vector3(startingPosition + (i * cubeWidth), 0, 0), Quaternion.identity);
+		for(int i = 0 - (visibleGridSize / 2); i< visibleGridSize / 2; i++) {
+			GameObject temp = Instantiate(cube, new Vector3(startingPosition + (i * cubeWidth), 0, 0), Quaternion.identity);
 			temp.GetComponent<BasicGroundBehavior>().effectivePosition = i;
 			gridLine.AddLast(temp);
+			if(i == 0){
+				currentCube = gridLine.Last;
+			}
 		}
 		BasicGroundBehavior.gridManager = this;
-		currentCube = gridLine.First;
-		Debug.Log(currentCube.Next.Value);
 	}
 	
 	// Update is called once per frame
