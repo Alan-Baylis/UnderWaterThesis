@@ -36,6 +36,14 @@ public class BasicGroundBehavior : MonoBehaviour {
 	public void ModifyPosition(int newX, int newEffectivePosition) {
 		startPos.x = newX;
 		effectivePosition = newEffectivePosition;
-		Debug.Log(effectivePosition);
+	}
+
+	public void TiltCube(float angle, Vector3 axis){
+		StartCoroutine(Tilt(angle, axis));
+	}
+
+	IEnumerator Tilt(float angle, Vector3 axis) {
+		float t = 0;
+		yield return null;
 	}
 }
