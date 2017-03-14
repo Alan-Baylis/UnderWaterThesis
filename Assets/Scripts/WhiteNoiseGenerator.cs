@@ -27,7 +27,7 @@ public class WhiteNoiseGenerator : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		gain = 0.1f + Mathf.PingPong(Time.time / 6, 0.6f);
-		lowPassFilter.cutoffFrequency = lowPassFrequency + Mathf.PingPong(Time.time / 5, lowPassFilterWaveSize);//(lowPassFilterWaveSize * Mathf.Sin(Time.time));
+		lowPassFilter.cutoffFrequency = lowPassFrequency + Mathf.PingPong(Time.time / 5, lowPassFilterWaveSize);
 	}
 
 	void OnAudioFilterRead(float[] data, int channels) {
