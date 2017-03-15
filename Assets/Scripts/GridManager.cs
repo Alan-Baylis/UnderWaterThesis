@@ -27,6 +27,16 @@ public class GridManager : MonoBehaviour {
 				currentCube = gridLine.Last;
 			}
 		}
+
+		LinkedGrid testGrid = new LinkedGrid();
+		testGrid.AddTopRow(visibleGrid);
+		List<GameObject> testList = new List<GameObject>();
+		for(int i = 0 - (visibleGridSize / 2); i < visibleGridSize / 2; i++) {
+			GameObject temp = Instantiate(cube, new Vector3(startingPosition + (i * cubeWidth), 0, 1), Quaternion.identity);
+			temp.GetComponent<BasicGroundBehavior>().effectivePosition = i;
+			testList.Add(temp);
+		}
+		testGrid.AddRow(testList.ToArray());
 		BasicGroundBehavior.gridManager = this;
 	}
 	
