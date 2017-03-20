@@ -4,11 +4,21 @@ using UnityEngine;
 
 public class BasicGroundBehavior : MonoBehaviour {
 
+	public class EffectivePositionPoint {
+		public int x;
+		public int y;
+
+		public EffectivePositionPoint(int newX, int newY) {
+			x = newX;
+			y = newY;
+		}
+	}
 	public static GridManager gridManager;
 	static AnimationCurve movementFunc;
 	static float totalPeriod = 3;
 	private Vector3 startPos;
-	public int effectivePosition;
+	//public int effectivePosition;
+	public EffectivePositionPoint effectivePosition;
 	public int realPosition;
 	// Use this for initialization
 	void Start () {
@@ -26,16 +36,17 @@ public class BasicGroundBehavior : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		transform.position = new Vector3(startPos.x, startPos.y + movementFunc.Evaluate(Time.time + effectivePosition), startPos.z);
+		transform.position = new Vector3(startPos.x, startPos.y + movementFunc.Evaluate(Time.time + effectivePosition.x + effectivePosition.y), startPos.z);
 	}
 
 	void OnTriggerEnter() {
-		gridManager.UpdatePlayerPosition(effectivePosition, gameObject);
+		gridManager.UpdatePlayerPosition(effectivePosition.x, gameObject);
 	}
 
-	public void ModifyPosition(int newX, int newEffectivePosition) {
+	public void ModifyPosition(int newX, int newEffectivePositionX, int newEffectivePositionY) {
 		startPos.x = newX;
-		effectivePosition = newEffectivePosition;
+		effectivePosition.x = newEffectivePositionX;
+		effectivePosition.y = newEffectivePositionY;
 	}
 
 	public void TiltCube(float angle, Vector3 axis){

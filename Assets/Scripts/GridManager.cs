@@ -21,7 +21,7 @@ public class GridManager : MonoBehaviour {
 		playerPos = startingPosition;
 		for(int i = 0 - (visibleGridSize / 2); i< visibleGridSize / 2; i++) {
 			GameObject temp = Instantiate(cube, new Vector3(startingPosition + (i * cubeWidth), 0, 0), Quaternion.identity);
-			temp.GetComponent<BasicGroundBehavior>().effectivePosition = i;
+			temp.GetComponent<BasicGroundBehavior>().effectivePosition = new BasicGroundBehavior.EffectivePositionPoint(i, 0);
 			gridLine.AddLast(temp);
 			if(i == 0){
 				currentCube = gridLine.Last;
@@ -32,8 +32,8 @@ public class GridManager : MonoBehaviour {
 		testGrid.AddTopRow(visibleGrid);
 		List<GameObject> testList = new List<GameObject>();
 		for(int i = 0 - (visibleGridSize / 2); i < visibleGridSize / 2; i++) {
-			GameObject temp = Instantiate(cube, new Vector3(startingPosition + (i * cubeWidth), 0, 1), Quaternion.identity);
-			temp.GetComponent<BasicGroundBehavior>().effectivePosition = i;
+			GameObject temp = Instantiate(cube, new Vector3(startingPosition + (i * cubeWidth), 0, cubeWidth), Quaternion.identity);
+			temp.GetComponent<BasicGroundBehavior>().effectivePosition = new BasicGroundBehavior.EffectivePositionPoint(i, 1);
 			testList.Add(temp);
 		}
 		testGrid.AddRow(testList.ToArray());
@@ -51,7 +51,7 @@ public class GridManager : MonoBehaviour {
 			gridLine.RemoveLast();
 			GameObject first = gridLine.First.Value;
 			temp.transform.position = new Vector3(first.transform.position.x - cubeWidth, temp.transform.position.y, 0);
-			temp.GetComponent<BasicGroundBehavior>().ModifyPosition((int)first.transform.position.x - (int)cubeWidth, x - visibleGridSize / 2);
+			temp.GetComponent<BasicGroundBehavior>().ModifyPosition((int)first.transform.position.x - (int)cubeWidth, x - visibleGridSize / 2, 1);
 			gridLine.AddFirst(temp);
 			currentCube = currentCube.Previous; 
 		}
@@ -61,7 +61,7 @@ public class GridManager : MonoBehaviour {
 			gridLine.RemoveFirst();
 			GameObject last = gridLine.Last.Value;
 			temp.transform.position = new Vector3(last.transform.position.x + cubeWidth, temp.transform.position.y, 0);
-			temp.GetComponent<BasicGroundBehavior>().ModifyPosition((int)last.transform.position.x + (int)cubeWidth, x + Mathf.CeilToInt(visibleGridSize / 2) + 2);
+			temp.GetComponent<BasicGroundBehavior>().ModifyPosition((int)last.transform.position.x + (int)cubeWidth, x + Mathf.CeilToInt(visibleGridSize / 2) + 2, 1);
 			gridLine.AddLast(temp);
 		}
 		RotateCubesTowardsPlayer();
