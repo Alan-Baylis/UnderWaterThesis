@@ -31,18 +31,36 @@ public class GridManager : MonoBehaviour {
 		LinkedGrid testGrid = new LinkedGrid();
 		testGrid.AddTopRow(visibleGrid);
 		List<GameObject> testList = new List<GameObject>();
-		for(int i = 0 - (visibleGridSize / 2); i < visibleGridSize / 2; i++) {
-			GameObject temp = Instantiate(cube, new Vector3(startingPosition + (i * cubeWidth), 0, cubeWidth), Quaternion.identity);
-			temp.GetComponent<BasicGroundBehavior>().effectivePosition = new BasicGroundBehavior.EffectivePositionPoint(i, 1);
-			testList.Add(temp);
+		for(int k = 1; k < visibleGridSize; k++) {
+			for(int i = 0 - (visibleGridSize / 2); i < visibleGridSize / 2; i++) {
+				GameObject temp = Instantiate(cube, new Vector3(startingPosition + (i * cubeWidth), 0, k * cubeWidth), Quaternion.identity);
+				temp.GetComponent<BasicGroundBehavior>().effectivePosition = new BasicGroundBehavior.EffectivePositionPoint(i, k);
+				testList.Add(temp);
+			}
+			testGrid.AddRow(testList.ToArray());
+			testList.Clear();
 		}
-		testGrid.AddRow(testList.ToArray());
+		Invoke("ChangeCurveToBig", BasicGroundBehavior.totalPeriod * 5 * Mathf.PI);
+		Debug.Log(BasicGroundBehavior.totalPeriod * 5 * Mathf.PI);
 		BasicGroundBehavior.gridManager = this;
 	}
-	
+
+	void ChangeCurveToBig() {
+			Debug.Log("changing curve");
+			AnimationCurve movementFunc = new AnimationCurve();
+			float t = Time.time + 35;
+			while(t < 45 + Time.time + (Mathf.PI * BasicGroundBehavior.totalPeriod * 4)) {
+				movementFunc.AddKey(new Keyframe(t, Mathf.Sin(t) * 3));
+				t += Time.deltaTime;
+			}
+			BasicGroundBehavior.movementFunc = movementFunc;
+			BasicGroundBehavior.movementFunc.postWrapMode = WrapMode.Loop;
+	}
 	// Update is called once per frame
 	void Update () {
-		
+		if(Input.GetKeyDown(KeyCode.A)) {
+			Debug.Log(Time.time);
+		}
 	}
 
 	public void UpdatePlayerPosition(int x, GameObject standingCube) {

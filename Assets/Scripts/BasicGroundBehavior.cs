@@ -14,8 +14,8 @@ public class BasicGroundBehavior : MonoBehaviour {
 		}
 	}
 	public static GridManager gridManager;
-	static AnimationCurve movementFunc;
-	static float totalPeriod = 3;
+	public static AnimationCurve movementFunc;
+	public static float totalPeriod = 3;
 	private Vector3 startPos;
 	//public int effectivePosition;
 	public EffectivePositionPoint effectivePosition;
@@ -26,11 +26,11 @@ public class BasicGroundBehavior : MonoBehaviour {
 		if(movementFunc == null) {
 			movementFunc = new AnimationCurve();
 			float t = 0;
-			while(t < Mathf.PI * 2) {
+			while(t < Mathf.PI * totalPeriod * 4) {
 				movementFunc.AddKey(new Keyframe(t, Mathf.Sin(t)));
 				t += Time.deltaTime;
 			}
-			movementFunc.postWrapMode = WrapMode.Loop;
+			movementFunc.postWrapMode = WrapMode.ClampForever;
 		}
 	}
 	
