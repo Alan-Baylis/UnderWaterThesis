@@ -29,29 +29,36 @@ public class GridManager : MonoBehaviour {
 		}
 
 		LinkedGrid testGrid = new LinkedGrid();
-		testGrid.AddFirstColumn(visibleGrid);
+/*		testGrid.AddFirstColumn(visibleGrid);
 		List<GameObject> testList = new List<GameObject>();
 		for(int i = 0 - (visibleGridSize / 2); i< visibleGridSize / 2; i++) {
 			GameObject temp = Instantiate(cube, new Vector3(cubeWidth * 2, 0, startingPosition + (i * cubeWidth)), Quaternion.identity);
 			temp.GetComponent<BasicGroundBehavior>().effectivePosition = new BasicGroundBehavior.EffectivePositionPoint(1, i);
 			testList.Add(temp);
 		}
-		testGrid.AddColumn(testList.ToArray());
-		/*testGrid.AddTopRow(visibleGrid);
+		testGrid.AddColumn(testList.ToArray());*/
+		gridLine.CopyTo(visibleGrid, 0);
+		testGrid.AddTopRow(visibleGrid);
 		List<GameObject> testList = new List<GameObject>();
 		for(int i = 0 - (visibleGridSize / 2); i < visibleGridSize / 2; i++) {
 			GameObject temp = Instantiate(cube, new Vector3(startingPosition + (i * cubeWidth), 0, cubeWidth), Quaternion.identity);
 			temp.GetComponent<BasicGroundBehavior>().effectivePosition = new BasicGroundBehavior.EffectivePositionPoint(i, 1);
 			testList.Add(temp);
 		}
-		testGrid.AddRow(testList.ToArray());*/
+		testGrid.AddRow(testList.ToArray());
+		testGrid.MoveTopRowDown();
+		Debug.Log("bottomRowmembers " + testGrid.BottomRow.Length.ToString());
+		foreach(LinkedGrid.GridNode node in testGrid.BottomRow) {
+			Debug.Log(node.Data);
+			node.Data.transform.position -= new Vector3(0, 0, cubeWidth);
+		}
 
 		BasicGroundBehavior.gridManager = this;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+
 	}
 
 	public void UpdatePlayerPosition(int x, GameObject standingCube) {

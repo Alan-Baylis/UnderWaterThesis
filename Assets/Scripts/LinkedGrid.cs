@@ -17,6 +17,28 @@ public class LinkedGrid {
 	public GridNode SWCorner;
 	public GridNode SECorner;
 
+	public GridNode[] TopRow {
+		get {
+			List<GridNode> topRow = new List<GridNode>();
+			for(GridNode i = NWCorner; i != NECorner; i = i.East) {
+				topRow.Add(i);
+			}
+			topRow.Add(NECorner);
+			return topRow.ToArray();
+		}
+	}
+
+	public GridNode[] BottomRow {
+		get {
+			List<GridNode> bottomRow = new List<GridNode>();
+			for(GridNode i = SWCorner; i != SECorner; i = i.East) {
+				bottomRow.Add(i);
+			}
+			bottomRow.Add(SECorner);
+			return bottomRow.ToArray();
+		}
+	}
+
 	public void AddNWCorner(GameObject data) {
 		GridNode newNode = new GridNode();
 
@@ -54,15 +76,19 @@ public class LinkedGrid {
 
 		newCorner.Data = newRow[0];
 		NWCorner = newCorner;
+		SWCorner = newCorner;
+		Debug.Log("Adding top row");
 		for(int i = 1; i < newRow.Length; i++) {
 			GridNode newNode = new GridNode();
 			newNode.Data = newRow[i];
+			Debug.Log(newRow[i]);
 			newNode.West = newCorner;
 			newCorner.East = newNode;
 
 			newCorner = newNode;
 		}
 		NECorner = newCorner;
+		SECorner = newCorner;
 	}
 
 	public void AddRow(GameObject[] newRow) {
@@ -71,14 +97,17 @@ public class LinkedGrid {
 		GridNode lastNode = new GridNode();
 		lastNode.Data = newRow[0];
 		lastNode.North = anchor;
+		anchor.South = lastNode;
 		SWCorner = lastNode;
-
+		Debug.Log("Adding row" + newRow.Length.ToString());
 		for(int i = 0; i < newRow.Length - 1; i++) {
 			anchor = anchor.East;
 			GridNode temp = new GridNode();
 			temp.Data = newRow[i];
 			temp.West = lastNode;
 			temp.North = anchor;
+			anchor.South = temp;
+			lastNode.East = temp;
 
 			lastNode = temp;
 		}
@@ -122,5 +151,20 @@ public class LinkedGrid {
 		 }
 
 		 SECorner = lastNode;
+	}
+
+	public void MoveTopRowDown() {
+		GridNode[] oldTopRow = this.TopRow;
+		NWCorner = oldTopRow[0].South;
+		NECorner = oldTopRow[oldTopRow.Length - 1].South;
+		foreach(GridNode node in this.TopRow) {
+			node.North = null;
+		}
+		GameObject[] newRow = new GameObject[oldTopRow.Length];
+		for(int i = 0; i < newRow.Length; i++) {
+			newRow[i] = oldTopRow[i].Data;
+			Debug.Log("oldTopRowData " + oldTopRow[i].Data.ToString());
+		}
+		AddRow(newRow);
 	}
 }
