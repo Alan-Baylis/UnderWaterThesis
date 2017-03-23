@@ -66,7 +66,7 @@ public class LinkedGrid {
 	}
 
 	public void AddRow(GameObject[] newRow) {
-		GridNode anchor = NWCorner;
+		GridNode anchor = SWCorner;
 
 		GridNode lastNode = new GridNode();
 		lastNode.Data = newRow[0];
@@ -86,5 +86,41 @@ public class LinkedGrid {
 		SECorner = lastNode;
 	}
 
+	public void AddFirstColumn(GameObject[] newColumn) {
+		GridNode newCorner = new GridNode();
 
+		newCorner.Data = newColumn[0];
+		NWCorner = newCorner;
+		for(int i = 1; i < newColumn.Length; i++) {
+			GridNode newNode = new GridNode();
+			newNode.Data = newColumn[i];
+			newNode.North = newCorner;
+			newCorner.South = newNode;
+
+			newCorner = newNode;
+			}
+		SWCorner = newCorner;
+		NECorner = NWCorner;
+		}
+
+	public void AddColumn(GameObject[] newColumn) {
+		GridNode anchor = NECorner;
+
+		 GridNode lastNode = new GridNode();
+		 lastNode.Data = newColumn[0];
+		 lastNode.West = anchor;
+		 NECorner = lastNode;
+
+		 for(int i = 0; i < newColumn.Length; i++) {
+			anchor = anchor.South;
+			GridNode temp = new GridNode();
+			temp.Data = newColumn[i];
+			temp.North = lastNode;
+			temp.West = anchor;
+
+			lastNode = temp;
+		 }
+
+		 SECorner = lastNode;
+	}
 }

@@ -29,14 +29,23 @@ public class GridManager : MonoBehaviour {
 		}
 
 		LinkedGrid testGrid = new LinkedGrid();
-		testGrid.AddTopRow(visibleGrid);
+		testGrid.AddFirstColumn(visibleGrid);
+		List<GameObject> testList = new List<GameObject>();
+		for(int i = 0 - (visibleGridSize / 2); i< visibleGridSize / 2; i++) {
+			GameObject temp = Instantiate(cube, new Vector3(cubeWidth * 2, 0, startingPosition + (i * cubeWidth)), Quaternion.identity);
+			temp.GetComponent<BasicGroundBehavior>().effectivePosition = new BasicGroundBehavior.EffectivePositionPoint(1, i);
+			testList.Add(temp);
+		}
+		testGrid.AddColumn(testList.ToArray());
+		/*testGrid.AddTopRow(visibleGrid);
 		List<GameObject> testList = new List<GameObject>();
 		for(int i = 0 - (visibleGridSize / 2); i < visibleGridSize / 2; i++) {
 			GameObject temp = Instantiate(cube, new Vector3(startingPosition + (i * cubeWidth), 0, cubeWidth), Quaternion.identity);
 			temp.GetComponent<BasicGroundBehavior>().effectivePosition = new BasicGroundBehavior.EffectivePositionPoint(i, 1);
 			testList.Add(temp);
 		}
-		testGrid.AddRow(testList.ToArray());
+		testGrid.AddRow(testList.ToArray());*/
+
 		BasicGroundBehavior.gridManager = this;
 	}
 	
