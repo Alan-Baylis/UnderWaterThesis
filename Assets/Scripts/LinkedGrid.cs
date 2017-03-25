@@ -60,6 +60,44 @@ public class LinkedGrid {
 		}
 	}
 
+	public GridNode[] LeftColumn {
+		get {
+			List<GridNode> leftColumn = new List<GridNode>();
+			for(GridNode i = NWCorner; i != SWCorner; i = i.South) {
+				leftColumn.Add(i);
+			}
+			leftColumn.Add(SWCorner);
+			return leftColumn.ToArray();
+		}
+		set {
+			GridNode anchor = this.LeftColumn[0];
+			for(int i = 0; i < value.Length; i++) {
+				anchor.West = value[i];
+				value[i].East = anchor;
+				anchor = anchor.South;
+			}
+		}
+	}
+
+	public GridNode[] RightColumn {
+		get {
+			List<GridNode> rightColumn = new List<GridNode>();
+			for(GridNode i = NECorner; i != SECorner; i = i.South) {
+				rightColumn.Add(i);
+			}
+			rightColumn.Add(SECorner);
+			return rightColumn.ToArray();
+		}
+		set {
+			GridNode anchor = this.RightColumn[0];
+			for(int i = 0; i < value.Length; i++) {
+				anchor.East = value[i];
+				value[i].West = anchor;
+				anchor = anchor.South;
+			}
+		}
+	}
+
 	public void AddNWCorner(GameObject data) {
 		GridNode newNode = new GridNode();
 
@@ -193,5 +231,27 @@ public class LinkedGrid {
 		}
 
 		this.TopRow = oldBottomRow;
+	}
+
+	public void MoveLeftColumnRight() {
+		GridNode[] oldLeftColumn = this.LeftColumn;
+		NWCorner = oldLeftColumn[0].East;
+		SWCorner = oldLeftColumn[oldLeftColumn.Length -1].East;
+		foreach(GridNode node in this.LeftColumn) {
+			node.West = null;
+		}
+
+		this.RightColumn = oldLeftColumn;
+	}
+
+	public void MoveRightColumnLeft() {
+		GridNode[] oldRightColumn = this.RightColumn;
+		NECorner = oldRightColumn[0].West;
+		SECorner = oldRightColumn[oldRightColumn.Length - 1].West;
+		foreach(GridNode node in this.RightColumn) {
+			node.East = null;
+		}
+
+		this.LeftColumn = oldRightColumn;
 	}
 }
