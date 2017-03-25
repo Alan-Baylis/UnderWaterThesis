@@ -46,7 +46,7 @@ public class GridManager : MonoBehaviour {
 			testList.Add(temp);
 		}
 		testGrid.AddRow(testList.ToArray());
-		testGrid.MoveBottomRowUp();
+		testGrid.MoveTopRowDown();
 		Debug.Log("bottomRowmembers " + testGrid.BottomRow.Length.ToString());
 		foreach(LinkedGrid.GridNode node in testGrid.TopRow) {
 			Debug.Log(node.Data);

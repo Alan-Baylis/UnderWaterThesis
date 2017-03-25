@@ -26,6 +26,17 @@ public class LinkedGrid {
 			topRow.Add(NECorner);
 			return topRow.ToArray();
 		}
+
+		set {
+			GridNode anchor = this.TopRow[0];
+			for(int i = 0; i < value.Length; i++) {
+				anchor.North = value[i];
+				value[i].South = anchor;
+				anchor = anchor.East;
+			}
+			NWCorner = value[0];
+			NECorner = value[value.Length - 1];
+		}
 	}
 
 	public GridNode[] BottomRow {
@@ -36,6 +47,16 @@ public class LinkedGrid {
 			}
 			bottomRow.Add(SECorner);
 			return bottomRow.ToArray();
+		}
+		set {
+			GridNode anchor = this.BottomRow[0];
+			for(int i = 0; i < value.Length; i++) {
+				anchor.South = value[i];
+				value[i].North = anchor;
+				anchor = anchor.East;
+			}
+			SWCorner = value[0];
+			SECorner = value[value.Length - 1];
 		}
 	}
 
@@ -160,12 +181,7 @@ public class LinkedGrid {
 		foreach(GridNode node in this.TopRow) {
 			node.North = null;
 		}
-		GameObject[] newRow = new GameObject[oldTopRow.Length];
-		for(int i = 0; i < newRow.Length; i++) {
-			newRow[i] = oldTopRow[i].Data;
-			Debug.Log("oldTopRowData " + oldTopRow[i].Data.ToString());
-		}
-		AddRow(newRow);
+		this.BottomRow = oldTopRow;
 	}
 
 	public void MoveBottomRowUp() {
@@ -176,15 +192,6 @@ public class LinkedGrid {
 			node.South = null;
 		}
 
-		GridNode anchor = this.TopRow[0];
-		for(int i = 0; i < oldBottomRow.Length; i++) {
-			anchor.North = oldBottomRow[i];
-			oldBottomRow[i].South = anchor;
-			anchor = anchor.East;
-		}
-		NWCorner = oldBottomRow[0];
-		NECorner = oldBottomRow[oldBottomRow.Length - 1];
-
-
+		this.TopRow = oldBottomRow;
 	}
 }
