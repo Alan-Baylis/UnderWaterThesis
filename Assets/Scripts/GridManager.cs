@@ -46,11 +46,11 @@ public class GridManager : MonoBehaviour {
 			testList.Add(temp);
 		}
 		testGrid.AddRow(testList.ToArray());
-		testGrid.MoveTopRowDown();
+		testGrid.MoveBottomRowUp();
 		Debug.Log("bottomRowmembers " + testGrid.BottomRow.Length.ToString());
-		foreach(LinkedGrid.GridNode node in testGrid.BottomRow) {
+		foreach(LinkedGrid.GridNode node in testGrid.TopRow) {
 			Debug.Log(node.Data);
-			node.Data.transform.position -= new Vector3(0, 0, cubeWidth);
+			node.Data.transform.position -= new Vector3(0, 0, -cubeWidth * 2);
 		}
 
 		BasicGroundBehavior.gridManager = this;

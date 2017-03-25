@@ -167,4 +167,24 @@ public class LinkedGrid {
 		}
 		AddRow(newRow);
 	}
+
+	public void MoveBottomRowUp() {
+		GridNode[] oldBottomRow = this.BottomRow;
+		SWCorner = oldBottomRow[0].North;
+		SECorner = oldBottomRow[oldBottomRow.Length - 1].North;
+		foreach(GridNode node in this.BottomRow) {
+			node.South = null;
+		}
+
+		GridNode anchor = this.TopRow[0];
+		for(int i = 0; i < oldBottomRow.Length; i++) {
+			anchor.North = oldBottomRow[i];
+			oldBottomRow[i].South = anchor;
+			anchor = anchor.East;
+		}
+		NWCorner = oldBottomRow[0];
+		NECorner = oldBottomRow[oldBottomRow.Length - 1];
+
+
+	}
 }
